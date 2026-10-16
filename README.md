@@ -1,7 +1,7 @@
 # Copernicus Thematic Water Hub Backend
 
 Plone 6 backend for WaterHub, based on the generic EEA `eeacms/plone-backend`
-image. The initial scaffold intentionally contains no WaterHub policy add-on.
+image and configured by the `eea.waterhub.policy` add-on.
 
 ## Requirements
 
@@ -18,8 +18,8 @@ make start
 ```
 
 On its first start, the container creates a `Plone` site using the Volto
-distribution. Site state persists in the named Docker volume
-`waterhub-backend-data`.
+distribution and applies `eea.waterhub.policy:default`. Site state persists in
+the named Docker volume `waterhub-backend-data`.
 
 - Backend: http://localhost:8080/Plone
 - REST API: http://localhost:8080/Plone/++api++
@@ -59,14 +59,9 @@ make build PLONE_IMAGE=eeacms/plone-backend:<approved-tag>
 The default is `eeacms/plone-backend:latest` for the initial smoke test. Pin an
 approved immutable tag before sharing or deploying the image.
 
-## Adding the policy package later
+## Policy development
 
-Once either `eea.waterhub.policy` or `copernicus.waterhub.policy` exists:
-
-1. Add the package to `requirements.txt`.
-2. Pin its released version in `constraints.txt`.
-3. Uncomment the matching checkout in `mx.ini` for editable development.
-4. Add its GenericSetup profile to `PROFILES` in `docker-compose.yml`, if it
-   needs automatic installation.
-5. Rebuild with `make develop`.
+The development image checks out `eea.waterhub.policy` from its `main` branch
+through `mxdev`. After pushing policy changes, rebuild with `make develop`.
+Released backend images use the version pinned in `constraints.txt`.
 

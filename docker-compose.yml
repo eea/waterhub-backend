@@ -10,6 +10,7 @@ services:
         PLONE_IMAGE: ${PLONE_IMAGE:-eeacms/plone-backend:latest}
     environment:
       SITE: Plone
+      PROFILES: eea.waterhub.policy:default
     ports:
       - "${BACKEND_PORT:-8080}:8080"
     volumes:

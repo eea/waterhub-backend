@@ -1,2 +1,2 @@
-# Pin project-specific add-on versions here for reproducible builds.
+eea.waterhub.policy==1.0.0a0
 

@@ -1,2 +1,2 @@
-# Project-specific add-ons will be added here when the WaterHub policy package exists.
+eea.waterhub.policy
 
