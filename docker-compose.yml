@@ -15,6 +15,7 @@ services:
       - "${BACKEND_PORT:-8080}:8080"
     volumes:
       - data:/data
+      - ./sources/eea.waterhub.policy:/app/sources/eea.waterhub.policy
     restart: unless-stopped
 
 volumes:

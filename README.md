@@ -61,7 +61,36 @@ approved immutable tag before sharing or deploying the image.
 
 ## Policy development
 
-The development image checks out `eea.waterhub.policy` from its `main` branch
-through `mxdev`. After pushing policy changes, rebuild with `make develop`.
-Released backend images use the version pinned in `constraints.txt`.
+`make develop` clones the policy repository into
+`sources/eea.waterhub.policy`. This nested checkout is ignored by the backend
+repository and keeps its own Git history. The development image also installs
+the package through `mxdev`, while Compose mounts the local checkout over that
+editable source. Edit it directly; pushing to GitHub is not required.
+
+After Python or ZCML changes, restart Plone. Run tests and checks inside the
+backend environment:
+
+```shell
+make restart
+make test
+make lint
+make format
+make shell
+```
+
+Commit policy changes from its own checkout:
+
+```shell
+cd sources/eea.waterhub.policy
+git status
+git add .
+git commit
+git push
+```
+
+Re-run `make develop` only after changing Python dependencies, `mx.ini`, or the
+development Dockerfile. GenericSetup profile changes must also be reapplied to
+an existing site through Site Setup, or implemented as an upgrade step.
+
+Released backend images use the policy version pinned in `constraints.txt`.
 
