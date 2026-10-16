@@ -1,4 +1,4 @@
-# WaterHub backend
+# Copernicus Thematic Water Hub Backend
 
 Plone 6 backend for WaterHub, based on the generic EEA `eeacms/plone-backend`
 image. The initial scaffold intentionally contains no WaterHub policy add-on.
