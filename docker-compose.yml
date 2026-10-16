@@ -1,0 +1,22 @@
+name: waterhub-backend
+
+services:
+  backend:
+    image: waterhub-backend:develop
+    build:
+      context: .
+      dockerfile: develop/Dockerfile
+      args:
+        PLONE_IMAGE: ${PLONE_IMAGE:-eeacms/plone-backend:latest}
+    environment:
+      SITE: Plone
+    ports:
+      - "${BACKEND_PORT:-8080}:8080"
+    volumes:
+      - data:/data
+    restart: unless-stopped
+
+volumes:
+  data:
+    name: waterhub-backend-data
+

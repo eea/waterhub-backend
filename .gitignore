@@ -1,0 +1,13 @@
+*.egg-info/
+*.py[cod]
+__pycache__/
+.coverage
+.env
+.idea/
+.pytest_cache/
+.venv/
+.vscode/
+constraints-mxdev.txt
+requirements-mxdev.txt
+sources/
+
