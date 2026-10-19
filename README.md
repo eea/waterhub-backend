@@ -10,16 +10,24 @@ image and configured by the `eea.waterhub.policy` add-on.
 
 ## Start developing
 
-Build the development image, then start Plone:
+Build and start the development container:
 
 ```shell
 make develop
 make start
 ```
 
-On its first start, the container creates a `Plone` site using the Volto
-distribution and applies `eea.waterhub.policy:default`. Site state persists in
-the named Docker volume `waterhub-backend-data`.
+The development container stays idle so that Plone can be started interactively,
+as in other EEA backend projects:
+
+```shell
+docker compose exec backend bash
+./docker-entrypoint.sh start
+```
+
+On its first interactive start, the entrypoint creates a `Plone` site using the
+Volto distribution and applies `eea.waterhub.policy:default`. Site state
+persists in the named Docker volume `waterhub-backend-data`.
 
 - Backend: http://localhost:8080/Plone
 - REST API: http://localhost:8080/Plone/++api++
@@ -67,11 +75,10 @@ repository and keeps its own Git history. The development image also installs
 the package through `mxdev`, while Compose mounts the local checkout over that
 editable source. Edit it directly; pushing to GitHub is not required.
 
-After Python or ZCML changes, restart Plone. Run tests and checks inside the
-backend environment:
+After Python or ZCML changes, stop the interactive process with `Ctrl-C` and run
+`./docker-entrypoint.sh start` again. Run tests and checks from another shell:
 
 ```shell
-make restart
 make test
 make lint
 make format

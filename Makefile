@@ -10,9 +10,9 @@ help:
 	@echo "WaterHub backend commands:"
 	@echo "  make checkout Clone the editable policy source under sources/"
 	@echo "  make develop  Build the development image (including mxdev sources)"
-	@echo "  make start    Run Plone in the foreground on port 8080"
+	@echo "  make start    Start the idle backend development container"
 	@echo "  make stop     Stop containers and preserve site data"
-	@echo "  make restart  Restart Plone after Python or ZCML changes"
+	@echo "  make restart  Restart the idle development container"
 	@echo "  make logs     Follow backend logs"
 	@echo "  make shell    Open a shell in the running backend"
 	@echo "  make test     Run policy tests in the backend container"
@@ -31,7 +31,7 @@ develop: checkout
 	PLONE_IMAGE=$(PLONE_IMAGE) docker compose build backend
 
 start:
-	PLONE_IMAGE=$(PLONE_IMAGE) docker compose up backend
+	PLONE_IMAGE=$(PLONE_IMAGE) docker compose up -d backend
 
 stop:
 	docker compose down

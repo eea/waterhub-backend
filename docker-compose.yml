@@ -3,6 +3,9 @@ name: waterhub-backend
 services:
   backend:
     image: waterhub-backend:develop
+    # Keep the development container alive without starting Zope. Start it
+    # explicitly from an interactive shell with ./docker-entrypoint.sh start.
+    entrypoint: ["/usr/bin/tail", "-f", "/dev/null"]
     build:
       context: .
       dockerfile: develop/Dockerfile
