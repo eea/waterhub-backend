@@ -3,8 +3,12 @@ IMAGE ?= waterhub-backend
 TAG ?= latest
 POLICY_REPOSITORY ?= https://github.com/eea/eea.waterhub.policy.git
 POLICY_SOURCE ?= sources/eea.waterhub.policy
+POLICY_REF ?= main
+TEST_IMAGE ?= waterhub-backend-test
+TEST_TAG ?= latest
+TEST_CONTAINER ?= waterhub-backend-policy-test
 
-.PHONY: help checkout develop start stop restart logs shell test lint format build clean config
+.PHONY: help checkout develop start stop restart logs shell test-image test lint package ci format build clean config
 
 help:
 	@echo "WaterHub backend commands:"
@@ -15,8 +19,11 @@ help:
 	@echo "  make restart  Restart the idle development container"
 	@echo "  make logs     Follow backend logs"
 	@echo "  make shell    Open a shell in the running backend"
-	@echo "  make test     Run policy tests in the backend container"
-	@echo "  make lint     Check policy Python sources"
+	@echo "  make test-image Build the self-contained policy test image"
+	@echo "  make test     Run policy tests with coverage in the test image"
+	@echo "  make lint     Check policy Python sources in the test image"
+	@echo "  make package  Build and validate policy distributions"
+	@echo "  make ci       Run all policy quality gates and export reports"
 	@echo "  make format   Format policy Python sources"
 	@echo "  make build    Build the production-style image"
 	@echo "  make clean    Remove containers and the local site-data volume"
@@ -25,6 +32,7 @@ checkout:
 	@mkdir -p sources
 	@if [ ! -d "$(POLICY_SOURCE)/.git" ]; then \
 		git clone $(POLICY_REPOSITORY) $(POLICY_SOURCE); \
+		git -C $(POLICY_SOURCE) checkout $(POLICY_REF); \
 	fi
 
 develop: checkout
@@ -45,12 +53,32 @@ logs:
 shell:
 	docker compose exec backend bash
 
-test:
-	docker compose exec backend pytest /app/sources/eea.waterhub.policy/tests
+test-image: checkout
+	docker build \
+		--build-arg PLONE_IMAGE=$(PLONE_IMAGE) \
+		--file Dockerfile.test \
+		--tag $(TEST_IMAGE):$(TEST_TAG) \
+		.
 
-lint:
-	docker compose exec backend ruff check /app/sources/eea.waterhub.policy/src /app/sources/eea.waterhub.policy/tests
-	docker compose exec backend ruff format --check /app/sources/eea.waterhub.policy/src /app/sources/eea.waterhub.policy/tests
+test: test-image
+	docker run --rm $(TEST_IMAGE):$(TEST_TAG) make test-ci
+
+lint: test-image
+	docker run --rm $(TEST_IMAGE):$(TEST_TAG) make lint
+
+package: test-image
+	docker run --rm $(TEST_IMAGE):$(TEST_TAG) make package
+
+ci: test-image
+	@set -eu; \
+		docker rm --force $(TEST_CONTAINER) >/dev/null 2>&1 || true; \
+		docker create --name $(TEST_CONTAINER) $(TEST_IMAGE):$(TEST_TAG) make ci >/dev/null; \
+		status=0; \
+		docker start --attach $(TEST_CONTAINER) || status=$$?; \
+		rm -rf xunit-reports-current; \
+		docker cp $(TEST_CONTAINER):/app/policy/xunit-reports-current ./xunit-reports-current || status=$$?; \
+		docker rm --force $(TEST_CONTAINER) >/dev/null; \
+		exit $$status
 
 format:
 	docker compose exec backend ruff check --fix /app/sources/eea.waterhub.policy/src /app/sources/eea.waterhub.policy/tests

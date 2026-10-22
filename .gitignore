@@ -10,4 +10,5 @@ __pycache__/
 constraints-mxdev.txt
 requirements-mxdev.txt
 sources/
+xunit-reports-current/
 

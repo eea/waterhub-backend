@@ -112,3 +112,34 @@ an existing site through Site Setup, or implemented as an upgrade step.
 
 Released backend images use the policy version pinned in `constraints.txt`.
 
+## Policy quality gates
+
+The backend builds a self-contained test image containing the policy source.
+No running development container or host bind mount is required:
+
+```shell
+make lint
+make test
+make package
+make ci
+```
+
+`make ci` runs the policy repository's canonical `make ci` command and copies
+JUnit, XML/LCOV, and HTML coverage reports to `xunit-reports-current/`.
+
+The equivalent Docker commands, suitable for both developers and Jenkins, are:
+
+```shell
+make checkout
+docker build --build-arg PLONE_IMAGE=eeacms/plone-backend:6.1.4-16 \
+  --file Dockerfile.test --tag waterhub-backend-test:latest .
+docker run --rm waterhub-backend-test:latest make lint
+docker run --rm waterhub-backend-test:latest make test-ci
+docker run --rm waterhub-backend-test:latest make package
+docker run --rm waterhub-backend-test:latest make ci
+```
+
+On a clean checkout, `POLICY_REF` selects the policy branch, tag, or commit to
+test; it defaults to `main`. An existing editable policy checkout is preserved
+and its current working tree is baked into the image.
+

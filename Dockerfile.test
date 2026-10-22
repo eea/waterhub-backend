@@ -1,0 +1,25 @@
+# syntax=docker/dockerfile:1
+
+ARG PLONE_IMAGE=eeacms/plone-backend:6.1.4-16
+FROM ${PLONE_IMAGE}
+
+USER root
+
+RUN apt-get update \
+    && apt-get install --yes --no-install-recommends make \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app/policy
+
+COPY --chown=plone:plone sources/eea.waterhub.policy/ ./
+
+RUN python3.12 -m venv --system-site-packages /app/test-venv \
+    && /app/test-venv/bin/pip install --no-cache-dir \
+        --no-build-isolation --editable ".[test]"
+
+ENV VENV=/app/test-venv
+
+USER plone
+
+ENTRYPOINT []
+CMD ["make", "ci"]

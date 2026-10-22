@@ -1,7 +1,12 @@
 .git
+**/.git
 .gitignore
 .venv
-sources
+sources/*
+!sources/eea.waterhub.policy/
+!sources/eea.waterhub.policy/**
+sources/eea.waterhub.policy/.git
 *.pyc
 __pycache__
+xunit-reports-current
 
