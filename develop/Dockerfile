@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-ARG PLONE_IMAGE=eeacms/plone-backend:latest
+ARG PLONE_IMAGE=eeacms/plone-backend:6.1.4-16
 FROM ${PLONE_IMAGE}
 
 WORKDIR /app

@@ -8,6 +8,17 @@ image and configured by the `eea.waterhub.policy` add-on.
 - Docker with Docker Compose
 - GNU Make
 
+## Supported backend stack
+
+- EEA backend image: `eeacms/plone-backend:6.1.4-16`
+- Plone: `6.1.4`
+- Python: `3.12`
+- `eea.volto.policy`: `12.7`
+
+The image tag and Python/Plone versions are kept aligned with the published EEA
+backend image. Add-on versions installed on top of it are pinned in
+`constraints.txt`.
+
 ## Start developing
 
 Build and start the development container:
@@ -64,8 +75,8 @@ make develop PLONE_IMAGE=eeacms/plone-backend:<approved-tag>
 make build PLONE_IMAGE=eeacms/plone-backend:<approved-tag>
 ```
 
-The default is `eeacms/plone-backend:latest` for the initial smoke test. Pin an
-approved immutable tag before sharing or deploying the image.
+The default is the released EEA image `eeacms/plone-backend:6.1.4-16`. Override
+it only when deliberately testing a newer approved image.
 
 ## Policy development
 

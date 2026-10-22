@@ -10,7 +10,7 @@ services:
       context: .
       dockerfile: develop/Dockerfile
       args:
-        PLONE_IMAGE: ${PLONE_IMAGE:-eeacms/plone-backend:latest}
+        PLONE_IMAGE: ${PLONE_IMAGE:-eeacms/plone-backend:6.1.4-16}
     environment:
       SITE: Plone
       PROFILES: eea.waterhub.policy:default
