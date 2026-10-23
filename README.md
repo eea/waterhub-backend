@@ -148,6 +148,23 @@ and its current working tree is baked into the image.
 See [RELEASE.md](RELEASE.md) for release preparation and the infrastructure
 values that must be confirmed before enabling Jenkins publishing.
 
+## Secret scanning
+
+The Betterleaks GitHub Action scans the current repository content on every
+push and pull request using `.gitleaks.toml`. When it finds a potential secret,
+the check fails and uploads a redacted `betterleaks-report` artifact.
+
+Optional failure emails require these repository or organization secrets:
+
+- `SMTP_URL`
+- `SMTP_PORT` (defaults to `25`)
+- `SMTP_EMAIL`
+- `SMTP_PASSWORD` (optional when the SMTP server needs no authentication)
+
+For a real secret, remove it, rotate it, and move it to the approved secret
+store. For a verified false positive, add `#betterleaks:allow` on the same line
+and explain the exception in the pull request. Never allowlist a real secret.
+
 ## Copyright and license
 
 Copyright European Environment Agency. This project is distributed under the

@@ -4,6 +4,7 @@ All notable changes to the WaterHub backend image are documented in this file.
 
 ## Unreleased
 
+- Add Betterleaks secret scanning and repository-specific detection rules.
 - Add project instructions, release documentation, changelog, and MIT license.
 - Add a deterministic policy quality-gate image and matching local commands.
 - Test `eea.waterhub.policy` with Ruff, pytest, coverage, and package validation.
