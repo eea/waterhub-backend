@@ -143,3 +143,13 @@ On a clean checkout, `POLICY_REF` selects the policy branch, tag, or commit to
 test; it defaults to `main`. An existing editable policy checkout is preserved
 and its current working tree is baked into the image.
 
+## Release
+
+See [RELEASE.md](RELEASE.md) for release preparation and the infrastructure
+values that must be confirmed before enabling Jenkins publishing.
+
+## Copyright and license
+
+Copyright European Environment Agency. This project is distributed under the
+MIT License; see [LICENSE.md](LICENSE.md).
+
