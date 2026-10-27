@@ -4,7 +4,7 @@ All notable changes to the WaterHub backend image are documented in this file.
 
 ## Unreleased
 
-- Use released `eea.waterhub.policy` 1.0.
+- Install `eea.waterhub.policy` 1.0 directly from its EEA eggrepo source archive.
 - Add Betterleaks secret scanning and repository-specific detection rules.
 - Add project instructions, release documentation, changelog, and MIT license.
 - Add a deterministic policy quality-gate image and matching local commands.
