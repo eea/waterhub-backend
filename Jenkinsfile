@@ -2,7 +2,7 @@ pipeline {
   agent any
 
   environment {
-    IMAGE_NAME = "eeacms/waterhub-backend"
+    registry = "eeacms/waterhub-backend"
     GIT_NAME = "waterhub-backend"
     SONARQUBE_TAG = 'water.hub.copernicus.eu'
     SONARQUBE_TAG_DEMO = 'water.hub.copernicus.02pre.eea.europa.eu'   
@@ -25,6 +25,8 @@ pipeline {
               checkout scm
               sh '''docker build -t ${IMAGE_NAME}:${TAG} .'''
               sh '''./test/run.sh ${IMAGE_NAME}:${TAG}'''
+
+              e
             } finally {
               sh script: "docker rmi ${IMAGE_NAME}:${TAG}", returnStatus: true
             }
@@ -32,7 +34,39 @@ pipeline {
         }
       }
     }
- 
+     stage('Build, Test & Push') {
+      when {
+        anyOf {
+          buildingTag()
+          branch 'master'
+        }
+      }
+      steps{
+        node(label: 'docker-big-jobs') {
+          script {
+            checkout scm
+            if (env.BRANCH_NAME == 'master') {
+              tagName = 'latest'
+            } else {
+              tagName = "$BRANCH_NAME".toLowerCase()
+            }
+            // build under a unique tag so the tests run on this build, never on a pulled image
+            buildTag = "$tagName-build$BUILD_NUMBER"
+            try {
+              dockerImage = docker.build("$registry:$buildTag", "--no-cache .")
+              sh "./test/run.sh $registry:$buildTag"
+              docker.withRegistry( '', 'eeajenkins' ) {
+                dockerImage.push(tagName)
+              }
+            } finally {
+              sh "docker rmi $registry:$buildTag $registry:$tagName || true"
+            }
+          }
+        }
+      }
+    }
+
+    
     stage('Release on tag creation') {
       when {
         buildingTag()
@@ -40,7 +74,7 @@ pipeline {
       steps{
         node(label: 'docker') {
           withCredentials([string(credentialsId: 'eea-jenkins-token', variable: 'GITHUB_TOKEN'),  string(credentialsId: 'waterhub-backend-trigger', variable: 'TRIGGER_MAIN_URL'), usernamePassword(credentialsId: 'jekinsdockerhub', usernameVariable: 'DOCKERHUB_USER', passwordVariable: 'DOCKERHUB_PASS')]) { //betterleaks:allow
-           sh '''docker pull eeacms/gitflow; docker run -i --rm --name="$BUILD_TAG"  -e GIT_BRANCH="$BRANCH_NAME" -e GIT_NAME="$GIT_NAME" -e DOCKERHUB_REPO="eeacms/waterhub-backend" -e GIT_TOKEN="$GITHUB_TOKEN" -e DOCKERHUB_USER="$DOCKERHUB_USER" -e DOCKERHUB_PASS="$DOCKERHUB_PASS"  -e TRIGGER_MAIN_URL="$TRIGGER_MAIN_URL" -e DEPENDENT_DOCKERFILE_URL="" -e GITFLOW_BEHAVIOR="RUN_ON_TAG" eeacms/gitflow'''
+           sh '''docker pull eeacms/gitflow; docker run -i --rm --name="$BUILD_TAG"  -e GIT_BRANCH="$BRANCH_NAME" -e GIT_NAME="$GIT_NAME" -e DOCKERHUB_REPO="$registry" -e GIT_TOKEN="$GITHUB_TOKEN" -e DOCKERHUB_USER="$DOCKERHUB_USER" -e DOCKERHUB_PASS="$DOCKERHUB_PASS"  -e TRIGGER_MAIN_URL="$TRIGGER_MAIN_URL" -e DEPENDENT_DOCKERFILE_URL="" -e GITFLOW_BEHAVIOR="RUN_ON_TAG" eeacms/gitflow'''
          }
 
         }
