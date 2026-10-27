@@ -14,26 +14,6 @@ pipeline {
   }
   
   stages {
-    stage('Build & Test') {
-      environment {
-        TAG = BUILD_TAG.toLowerCase()
-      }
-      steps {
-        node(label: 'docker') {
-          script {
-            try {
-              checkout scm
-              sh '''docker build -t ${IMAGE_NAME}:${TAG} .'''
-              sh '''./test/run.sh ${IMAGE_NAME}:${TAG}'''
-
-              e
-            } finally {
-              sh script: "docker rmi ${IMAGE_NAME}:${TAG}", returnStatus: true
-            }
-          }
-        }
-      }
-    }
      stage('Build, Test & Push') {
       when {
         anyOf {
