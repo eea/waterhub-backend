@@ -35,11 +35,11 @@ checkout:
 		git -C $(POLICY_SOURCE) checkout $(POLICY_REF); \
 	fi
 
-develop: checkout
-	PLONE_IMAGE=$(PLONE_IMAGE) docker compose build backend
+develop: checkout build
+	BACKEND_IMAGE=$(IMAGE):$(TAG) docker compose build backend
 
 start:
-	PLONE_IMAGE=$(PLONE_IMAGE) docker compose up -d backend
+	BACKEND_IMAGE=$(IMAGE):$(TAG) docker compose up -d backend
 
 stop:
 	docker compose down
@@ -91,5 +91,5 @@ clean:
 	docker compose down --volumes --remove-orphans
 
 config:
-	PLONE_IMAGE=$(PLONE_IMAGE) docker compose config
+	BACKEND_IMAGE=$(IMAGE):$(TAG) docker compose config
 

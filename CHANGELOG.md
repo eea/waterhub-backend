@@ -12,6 +12,8 @@ All notable changes to the WaterHub backend image are documented in this file.
 - Pin the backend to `eeacms/plone-backend:6.1.4-16`, Plone 6.1.4, Python 3.12,
   and `eea.volto.policy` 12.7.
 - Add editable `eea.waterhub.policy` development through `mxdev`.
+- Build the development image from the self-contained `develop/` directory on
+  top of the production image, with separate development requirements.
 
 Release entries should use the release tag as their heading and summarize
 changes since the previous tag. Keep new work under `Unreleased` until a

@@ -106,7 +106,16 @@ git commit
 git push
 ```
 
-Re-run `make develop` only after changing Python dependencies, `mx.ini`, or the
+The development image is defined in `develop/`, which is also its build
+context (`cd develop && docker build .`). It extends the production image and
+adds:
+
+- `develop/requirements.txt`: development-only Python packages, kept separate
+  from the production `requirements.txt`;
+- `develop/mx.ini`: add-ons checked out by `mxdev` as editable sources under
+  `sources/`.
+
+Re-run `make develop` only after changing Python dependencies, `develop/mx.ini`, or the
 development Dockerfile. GenericSetup profile changes must also be reapplied to
 an existing site through Site Setup, or implemented as an upgrade step.
 
