@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-ARG PLONE_IMAGE=eeacms/plone-backend:6.1.4-16
+ARG PLONE_IMAGE=eeacms/plone-backend:6.1.4-23
 FROM ${PLONE_IMAGE}
 
 ARG EGGREPO_URL=https://eggrepo.eea.europa.eu/simple
