@@ -3,6 +3,7 @@ pipeline {
 
   environment {
     registry = "eeacms/waterhub-backend"
+    registryDevel = "eeacms/waterhub-backend-devel"
     GIT_NAME = "waterhub-backend"
     SONARQUBE_TAG = 'water.hub.copernicus.eu'
     SONARQUBE_TAG_DEMO = 'water.hub.copernicus.02pre.eea.europa.eu'   
@@ -38,8 +39,15 @@ pipeline {
               docker.withRegistry( '', 'eeajenkins' ) {
                 dockerImage.push(tagName)
               }
+              // build devel if latest is pushed
+              if (env.BRANCH_NAME == 'master') {
+                dockerDevelImage = docker.build("$registryDevel:latest", "develop/.")
+                docker.withRegistry( '', 'eeajenkins' ) {
+                  dockerDevelImage.push()
+                }
+              }
             } finally {
-              sh "docker rmi $registry:$buildTag $registry:$tagName || true"
+              sh "docker rmi $registry:$buildTag $registry:$tagName $registryDevel:latest || true"
             }
           }
         }
