@@ -11,6 +11,8 @@ RUN pip install --no-cache-dir \
     -r /app/requirements.txt \
     -c /app/constraints.txt
 
+ENV ZCML="eea.waterhub.policy"
+
 LABEL org.opencontainers.image.title="WaterHub backend" \
       org.opencontainers.image.description="Plone 6 backend for WaterHub"
 
