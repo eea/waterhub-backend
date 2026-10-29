@@ -1,2 +1,2 @@
-eea.volto.policy==12.7
+eea.volto.policy==14.2
 
