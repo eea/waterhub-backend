@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM eeacms/plone-backend:6.1.4-24
+FROM eeacms/plone-backend:6.1.5-1
 
 ARG EGGREPO_URL=https://eggrepo.eea.europa.eu/simple
 
