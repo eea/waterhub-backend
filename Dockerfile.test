@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-ARG PLONE_IMAGE=eeacms/plone-backend:6.1.4-16
+ARG PLONE_IMAGE=eeacms/plone-backend:6.1.5-1
 FROM ${PLONE_IMAGE}
 
 USER root
@@ -18,9 +18,9 @@ RUN chown plone:plone /app/policy \
     && python3.12 -m venv --system-site-packages /app/test-venv \
     && /app/test-venv/bin/pip install --no-cache-dir \
         --constraint /app/waterhub-constraints.txt \
-        --constraint https://dist.plone.org/release/6.1.4/constraints.txt \
+        --constraint https://dist.plone.org/release/6.1.5/constraints.txt \
         --editable ".[test]" \
-    && chown --recursive plone:plone /app/test-venv
+    && chown --recursive plone:plone /app/policy /app/test-venv
 
 ENV VENV=/app/test-venv
 

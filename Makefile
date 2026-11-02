@@ -1,4 +1,4 @@
-PLONE_IMAGE ?= eeacms/plone-backend:6.1.4-16
+PLONE_IMAGE ?= eeacms/plone-backend:6.1.5-1
 IMAGE ?= waterhub-backend
 TAG ?= latest
 POLICY_REPOSITORY ?= https://github.com/eea/eea.waterhub.policy.git
