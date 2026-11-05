@@ -10,10 +10,10 @@ image and configured by the `eea.waterhub.policy` add-on.
 
 ## Supported backend stack
 
-- EEA backend image: `eeacms/plone-backend:6.1.4-16`
-- Plone: `6.1.4`
+- EEA backend image: `eeacms/plone-backend:6.1.5-1`
+- Plone: `6.1.5`
 - Python: `3.12`
-- `eea.volto.policy`: `12.7`
+- `eea.volto.policy`: `14.2`
 
 The image tag and Python/Plone versions are kept aligned with the published EEA
 backend image. Add-on versions installed on top of it are pinned in
@@ -75,7 +75,7 @@ make develop PLONE_IMAGE=eeacms/plone-backend:<approved-tag>
 make build PLONE_IMAGE=eeacms/plone-backend:<approved-tag>
 ```
 
-The default is the released EEA image `eeacms/plone-backend:6.1.4-16`. Override
+The default is the released EEA image `eeacms/plone-backend:6.1.5-1`. Override
 it only when deliberately testing a newer approved image.
 
 ## Policy development
@@ -106,7 +106,16 @@ git commit
 git push
 ```
 
-Re-run `make develop` only after changing Python dependencies, `mx.ini`, or the
+The development image is defined in `develop/`, which is also its build
+context (`cd develop && docker build .`). It extends the production image and
+adds:
+
+- `develop/requirements.txt`: development-only Python packages, kept separate
+  from the production `requirements.txt`;
+- `develop/mx.ini`: add-ons checked out by `mxdev` as editable sources under
+  `sources/`.
+
+Re-run `make develop` only after changing Python dependencies, `develop/mx.ini`, or the
 development Dockerfile. GenericSetup profile changes must also be reapplied to
 an existing site through Site Setup, or implemented as an upgrade step.
 
@@ -131,7 +140,7 @@ The equivalent Docker commands, suitable for both developers and Jenkins, are:
 
 ```shell
 make checkout
-docker build --build-arg PLONE_IMAGE=eeacms/plone-backend:6.1.4-16 \
+docker build --build-arg PLONE_IMAGE=eeacms/plone-backend:6.1.5-1 \
   --file Dockerfile.test --tag waterhub-backend-test:latest .
 docker run --rm waterhub-backend-test:latest make lint
 docker run --rm waterhub-backend-test:latest make test-ci

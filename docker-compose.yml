@@ -7,10 +7,9 @@ services:
     # explicitly from an interactive shell with ./docker-entrypoint.sh start.
     entrypoint: ["/usr/bin/tail", "-f", "/dev/null"]
     build:
-      context: .
-      dockerfile: develop/Dockerfile
+      context: ./develop
       args:
-        PLONE_IMAGE: ${PLONE_IMAGE:-eeacms/plone-backend:6.1.4-16}
+        BACKEND_IMAGE: ${BACKEND_IMAGE:-waterhub-backend:latest}
     environment:
       SITE: Plone
       PROFILES: eea.waterhub.policy:default

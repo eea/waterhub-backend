@@ -9,10 +9,10 @@ belongs in the sibling `waterhub-frontend` repository.
 
 ## Supported stack
 
-- Base image: `eeacms/plone-backend:6.1.4-16`
-- Plone: 6.1.4
+- Base image: `eeacms/plone-backend:6.1.5-1`
+- Plone: 6.1.5
 - Python: 3.12
-- `eea.volto.policy`: 12.7
+- `eea.volto.policy`: 14.2
 
 Read the exact pins from `constraints.txt`, `requirements.txt`, and the
 `PLONE_IMAGE` Make variable. Do not upgrade them independently.
