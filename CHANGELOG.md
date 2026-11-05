@@ -4,13 +4,11 @@ All notable changes to the WaterHub backend image are documented in this file.
 
 ## Unreleased
 
-- Install `eea.waterhub.policy` 1.0 directly from its EEA eggrepo source archive.
+- Use released `eea.waterhub.policy`.
 - Add Betterleaks secret scanning and repository-specific detection rules.
 - Add project instructions, release documentation, changelog, and MIT license.
 - Add a deterministic policy quality-gate image and matching local commands.
 - Test `eea.waterhub.policy` with Ruff, pytest, coverage, and package validation.
-- Upgrade the backend to `eeacms/plone-backend:6.1.5-1`, Plone 6.1.5,
-  Python 3.12, and `eea.volto.policy` 14.2.
 - Add editable `eea.waterhub.policy` development through `mxdev`.
 - Build the development image from the self-contained `develop/` directory on
   top of the production image, with separate development requirements.
