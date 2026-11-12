@@ -4,6 +4,8 @@ All notable changes to the WaterHub backend image are documented in this file.
 
 ## Unreleased
 
+- Pin `collective.volto.formsupport` 3.3.3 for the contact form and
+  Friendly Captcha support.
 - Use released `eea.waterhub.policy`.
 - Add Betterleaks secret scanning and repository-specific detection rules.
 - Add project instructions, release documentation, changelog, and MIT license.
