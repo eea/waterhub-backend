@@ -4,7 +4,7 @@ FROM eeacms/plone-backend:6.1.6-2
 ARG EGGREPO_URL=https://eggrepo.eea.europa.eu/simple
 
 COPY requirements.txt constraints.txt /app/
-RUN pip install --no-cache-dir \
+RUN /app/bin/pip install --no-cache-dir \
     --extra-index-url "${EGGREPO_URL}" \
     -r /app/requirements.txt \
     -c /app/constraints.txt
