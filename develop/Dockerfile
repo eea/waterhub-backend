@@ -9,9 +9,9 @@ FROM ${BACKEND_IMAGE}
 WORKDIR /app/develop
 
 COPY mx.ini requirements.txt ./
-RUN pip install --no-cache-dir mxdev \
-    && mxdev -c mx.ini \
-    && pip install --no-cache-dir -r requirements-mxdev.txt \
+RUN /app/bin/pip install --no-cache-dir mxdev \
+    && /app/bin/mxdev -c mx.ini \
+    && /app/bin/pip install --no-cache-dir -r requirements-mxdev.txt \
     && find /app -not -user plone -exec chown plone:plone {} \+
 
 WORKDIR /app
